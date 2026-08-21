@@ -1,6 +1,6 @@
 # Button Presser for Windows
 
-A small Windows desktop utility that presses a selected key at a random interval. Ordinary OS-level keyboard input.
+A small Windows desktop utility that presses a selected key at a chosen interval randomly. Ordinary OS-level keyboard input.
 
 ## Features
 
