@@ -1,5 +1,5 @@
 [tool.pytest.ini_options]
-testpaths = ["test_clicker.py"]
+testpaths = ["test_button_presser.py"]
 addopts = "-ra"
 
 [tool.ruff]

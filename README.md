@@ -19,7 +19,7 @@ A small Windows desktop utility that presses a selected key at a random interval
 - Python 3.10 or later.
 - The dependencies in [`requirements.txt`](requirements.txt).
 
-Install the runtime dependencies from the `Clicker` directory:
+Install the runtime dependencies from the project directory:
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -28,7 +28,7 @@ python -m pip install -r requirements.txt
 ## Run from source
 
 ```powershell
-python Clicker.py
+python button_presser.py
 ```
 
 The application starts stopped. Choose a key and interval range, then press **Start** or F6. Closing the window minimizes it to the system tray; use the tray menu to quit.
@@ -39,7 +39,7 @@ Install the development dependencies and run PyInstaller:
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-pyinstaller --onefile --windowed --name Button-Presser-for-Windows Clicker.py
+pyinstaller --onefile --windowed --name Button-Presser-for-Windows button_presser.py
 ```
 
 The executable will be placed in `dist/`.
@@ -59,8 +59,8 @@ python -m pytest
 
 | File | Purpose |
 | --- | --- |
-| `Clicker.py` | Application and GUI implementation |
-| `test_clicker.py` | Unit and failure-path tests |
+| `button_presser.py` | Application and GUI implementation |
+| `test_button_presser.py` | Unit and failure-path tests |
 | `requirements.txt` | Runtime dependencies |
 | `requirements-dev.txt` | Test and build dependencies |
 | `pyproject.toml` | Pytest and tool configuration |
