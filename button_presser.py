@@ -59,7 +59,6 @@ import keyboard
 import pystray
 from PIL import Image, ImageDraw
 
-
 LOGGER = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -68,7 +67,7 @@ LOGGER = logging.getLogger(__name__)
 # `keyboard` doesn't reliably set Windows' "extended key" scan-code flag.
 # That flag is what tells Windows (and things hooked into it, like the
 # Ease of Access "press CTRL to locate pointer" feature) that a key is the
-# right-hand version of a key rather than the left-hand one -- real
+# the right-hand version of a key rather than the left-hand one -- real
 # hardware sets it automatically, injected input has to set it explicitly.
 # ---------------------------------------------------------------------------
 user32 = ctypes.WinDLL("user32", use_last_error=True) if sys.platform == "win32" else None
@@ -157,13 +156,13 @@ def _send_key_event(vk: int, extended: bool, key_up: bool) -> None:
         raise OSError(f"MapVirtualKeyW failed for virtual key {vk} (GetLastError={err})")
     extra = ctypes.c_ulong(0)
     inp = _Input(INPUT_KEYBOARD, _Input_I(ki=_KeyBdInput(vk, scan, flags, 0,
-                                                           ctypes.pointer(extra))))
+                                                         ctypes.pointer(extra))))
     ctypes.set_last_error(0)
     sent = user32.SendInput(1, ctypes.pointer(inp), ctypes.sizeof(inp))
     if sent != 1:
         err = ctypes.get_last_error()
         raise OSError(f"SendInput failed (sent={sent}, GetLastError={err}: "
-                       f"{ctypes.WinError(err).strerror if err else 'no error code'})")
+                      f"{ctypes.WinError(err).strerror if err else 'no error code'})")
 
 
 def press_key(name: str) -> None:
@@ -178,6 +177,7 @@ def press_key(name: str) -> None:
     finally:
         # Do not leave Ctrl/Alt (or another key) stuck if the hold is interrupted.
         _send_key_event(vk, extended, key_up=True)
+
 
 # ---------------------------------------------------------------------------
 # Color palette / style
@@ -211,7 +211,7 @@ class DualSlider(tk.Canvas):
         if width <= 2 * SLIDER_PADDING:
             raise ValueError("slider width is too small for its padding")
         super().__init__(parent, width=width, height=height,
-                          bg=PANEL, highlightthickness=0, **kwargs)
+                         bg=PANEL, highlightthickness=0, **kwargs)
         self.from_ = from_
         self.to = to
         self.low = low
@@ -245,23 +245,23 @@ class DualSlider(tk.Canvas):
 
         # full track
         self.create_line(self.pad, mid_y, self.w - self.pad, mid_y,
-                          fill=TRACK, width=6, capstyle=tk.ROUND)
+                         fill=TRACK, width=6, capstyle=tk.ROUND)
 
         x1, x2 = self._val_to_x(self.low), self._val_to_x(self.high)
         # active range highlight
         self.create_line(x1, mid_y, x2, mid_y, fill=ACCENT, width=6,
-                          capstyle=tk.ROUND)
+                         capstyle=tk.ROUND)
 
         r = 9
         self.create_oval(x1 - r, mid_y - r, x1 + r, mid_y + r,
-                          fill=TEXT, outline=ACCENT, width=2, tags="low")
+                         fill=TEXT, outline=ACCENT, width=2, tags="low")
         self.create_oval(x2 - r, mid_y - r, x2 + r, mid_y + r,
-                          fill=TEXT, outline=ACCENT, width=2, tags="high")
+                         fill=TEXT, outline=ACCENT, width=2, tags="high")
 
         self.create_text(x1, mid_y - 20, text=f"{self.low:.2f}s",
-                          fill=TEXT, font=("Segoe UI", 9, "bold"))
+                         fill=TEXT, font=("Segoe UI", 9, "bold"))
         self.create_text(x2, mid_y - 20, text=f"{self.high:.2f}s",
-                          fill=TEXT, font=("Segoe UI", 9, "bold"))
+                         fill=TEXT, font=("Segoe UI", 9, "bold"))
 
     # -- interaction -----------------------------------------------------------
     def _on_press(self, event):
@@ -324,26 +324,26 @@ class KeyPresserApp:
         style = ttk.Style()
         style.theme_use("clam")
         style.configure("TButton", background=ACCENT, foreground=TEXT,
-                         font=("Segoe UI", 10, "bold"), borderwidth=0,
-                         padding=8)
+                        font=("Segoe UI", 10, "bold"), borderwidth=0,
+                        padding=8)
         style.map("TButton", background=[("active", ACCENT_DIM)])
         style.configure("TEntry", fieldbackground=PANEL, foreground=TEXT,
-                         insertcolor=TEXT, borderwidth=0)
+                        insertcolor=TEXT, borderwidth=0)
 
         header = tk.Frame(r, bg=BG)
         header.pack(fill="x", pady=(18, 6), padx=20)
         tk.Label(header, text="Button Presser for Windows", bg=BG, fg=TEXT,
-                  font=("Segoe UI", 15, "bold")).pack(anchor="w")
+                 font=("Segoe UI", 15, "bold")).pack(anchor="w")
         tk.Label(header, text="Scroll Lock, pressed at a random interval",
-                  bg=BG, fg=SUBTEXT, font=("Segoe UI", 9)).pack(anchor="w")
+                 bg=BG, fg=SUBTEXT, font=("Segoe UI", 9)).pack(anchor="w")
 
         # slider panel
         panel = tk.Frame(r, bg=PANEL, bd=0)
         panel.pack(fill="x", padx=20, pady=14)
         tk.Label(panel, text="Interval range (seconds)", bg=PANEL, fg=SUBTEXT,
-                  font=("Segoe UI", 9)).pack(anchor="w", padx=14, pady=(12, 0))
+                 font=("Segoe UI", 9)).pack(anchor="w", padx=14, pady=(12, 0))
         self.slider = DualSlider(panel, from_=0.05, to=10.0, low=0.5, high=2.0,
-                                  width=340, height=60)
+                                 width=340, height=60)
         self.slider.pack(padx=14, pady=(4, 14))
 
         # Key selection. Lock keys also toggle their corresponding keyboard
@@ -351,7 +351,7 @@ class KeyPresserApp:
         key_panel = tk.Frame(r, bg=BG)
         key_panel.pack(fill="x", padx=20, pady=(0, 10))
         tk.Label(key_panel, text="Key:", bg=BG, fg=SUBTEXT,
-                  font=("Segoe UI", 9)).pack(side="left")
+                 font=("Segoe UI", 9)).pack(side="left")
         self.key_var = tk.StringVar(value=DEFAULT_KEY)
         self.key_dropdown = ttk.Combobox(
             key_panel,
@@ -368,22 +368,22 @@ class KeyPresserApp:
         status_frame = tk.Frame(r, bg=BG)
         status_frame.pack(fill="x", padx=20, pady=(4, 6))
         self.status_label = tk.Label(status_frame, textvariable=self.status_var,
-                                      bg=BG, fg=RED, font=("Segoe UI", 11, "bold"))
+                                     bg=BG, fg=RED, font=("Segoe UI", 11, "bold"))
         self.status_label.pack(side="left")
         tk.Label(status_frame, textvariable=self.count_var, bg=BG, fg=SUBTEXT,
-                  font=("Segoe UI", 9)).pack(side="right")
+                 font=("Segoe UI", 9)).pack(side="right")
 
         # start/stop button
         self.toggle_btn = ttk.Button(r, text=f"Start ({TOGGLE_HOTKEY.upper()})",
-                                      command=self.toggle)
+                                     command=self.toggle)
         self.toggle_btn.pack(fill="x", padx=20, pady=(8, 4))
 
         tk.Label(r, text=f"Global hotkey: {TOGGLE_HOTKEY.upper()}  •  closing this window "
-                          f"sends it to the tray", bg=BG, fg=SUBTEXT,
-                  font=("Segoe UI", 8)).pack(pady=(10, 0))
+                         f"sends it to the tray", bg=BG, fg=SUBTEXT,
+                 font=("Segoe UI", 8)).pack(pady=(10, 0))
 
         tray_btn = tk.Label(r, text="Minimize to tray", bg=BG, fg=ACCENT,
-                             font=("Segoe UI", 9, "underline"), cursor="hand2")
+                            font=("Segoe UI", 9, "underline"), cursor="hand2")
         tray_btn.pack(pady=(14, 0))
         tray_btn.bind("<Button-1>", lambda e: self.minimize_to_tray())
 
@@ -449,7 +449,7 @@ class KeyPresserApp:
                 return
             except Exception as exc:  # never let an unexpected worker error be silent
                 self.root.after(0, self._worker_failed,
-                                 f"Worker error: {type(exc).__name__}", stop_event)
+                                f"Worker error: {type(exc).__name__}", stop_event)
                 return
             with self._count_lock:
                 self.press_count += 1
